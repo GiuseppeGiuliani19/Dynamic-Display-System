@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Impressions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1a2e, #4b006e);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+            letter-spacing: 2px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .btn-back {
+            background-color: #17a2b8;
+        }
+        .btn-back:hover {
+            background-color: #117a8b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+            position: relative;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+        }
+        td {
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-container input,
+        .form-container button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="datetime-local"] {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .form-container button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: float 10s ease-in-out infinite;
+            z-index: -1;
+        }
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 70%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+
+            const today = new Date();
+            const oneYearAgo = new Date(today);
+            oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+            const formatDate = (date) => {
+                const pad = (num) => num.toString().padStart(2, '0');
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            };
+
+            startDateInput.value = formatDate(oneYearAgo);
+            endDateInput.value = formatDate(today);
+        });
+    </script>
+</head>
+<body>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="header">
+    <h1>Report Impressions</h1>
+    <a th:href="@{/impianti}" class="btn btn-back">Back</a>
+</div>
+<div class="form-container">
+    <form th:action="@{/report}" method="get">
+        <label for="startDate">Start Date:</label>
+        <input type="datetime-local" id="startDate" name="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="datetime-local" id="endDate" name="endDate" required>
+        <label for="idImpianto">ID Impianto:</label>
+        <input type="text" id="idImpianto" name="idImpianto">
+        <button type="submit">Filter</button>
+    </form>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>ID Impianto</th>
+        <th>Impressions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="impression : ${impressions}">
+        <td th:text="${impression[0]}"></td>
+        <td th:text="${impression[1]}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

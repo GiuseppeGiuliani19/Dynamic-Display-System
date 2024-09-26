@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Wall Display</title>
+    <style>
+        #led-wall {
+            width: 100%;
+            height: 100%;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        #info-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            padding: 5px 0;
+            font-family: "Times New Roman";
+        }
+    </style>
+</head>
+<body>
+<div id="led-wall"></div>
+<div id="info-bar">Time: <span id="current-time"></span> - Weather: <span id="weather"></span></div>
+<script>
+
+
+    async function loadPlaylist(xmlFile) {
+        try {
+            const response = await fetch(xmlFile);
+            if (!response.ok) {
+                throw new Error('Failed to fetch the XML file');
+            }
+
+            const xmlString = await response.text();
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+            const content = xmlDoc.getElementsByTagName("file");
+            const displayTime = 10000;
+
+            if (content.length === 0) {
+                throw new Error('No <file> elements found in XML');
+            }
+
+            while (true) {
+                for (let i = 0; i < content.length; i++) {
+                    const file = content[i].textContent.trim();
+                    const htmlResponse = await fetch(file);
+                    if (!htmlResponse.ok) {
+                        throw new Error(`Failed to fetch the HTML file: ${file}`);
+                    }
+
+                    const html = await htmlResponse.text();
+                    document.getElementById("led-wall").innerHTML = html;
+                    await sendReport();
+                    await new Promise(resolve => setTimeout(resolve, displayTime));
+                }
+            }
+        } catch (error) {
+            console.error('Error loading playlist:', error);
+        }
+    }
+
+    function updateTime() {
+        const currentTime = new Date();
+        let hours = currentTime.getHours();
+        let minutes = currentTime.getMinutes();
+        let seconds = currentTime.getSeconds();
+
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        seconds = (seconds < 10 ? "0" : "") + seconds;
+
+        const timeString = hours + ":" + minutes + ":" + seconds;
+        document.getElementById('current-time').textContent = timeString;
+    }
+
+    function updateWeather() {
+        getWeather(38.115688, 13.361267);
+    }
+
+    function getWeather(latitude, longitude) {
+        const apiKey = 'bf0f5c3cde1969b4a63489f65ed2ed8f';
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const weatherDescription = data.weather[0].description;
+                const temperature = data.main.temp;
+                const temperatureString = temperature + "°C";
+
+                document.getElementById('weather').textContent = `${weatherDescription} - ${temperatureString}`;
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+                document.getElementById('weather').textContent = "Error fetching weather data.";
+            });
+    }
+
+    loadPlaylist("/file3.xml");
+
+    setInterval(updateTime, 1000);
+    updateWeather();
+</script>
+</body>
+</html>

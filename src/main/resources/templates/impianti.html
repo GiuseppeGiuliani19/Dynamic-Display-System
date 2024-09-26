@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elenco Impianti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1a2e, #4b006e);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+            letter-spacing: 2px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .btn-add {
+            background-color: #28a745;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        .btn-report {
+            background-color: #17a2b8;
+        }
+        .btn-report:hover {
+            background-color: #117a8b;
+        }
+        .action-buttons-container {
+            display: flex;
+            gap: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+            position: relative;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+        }
+        td {
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .action-buttons form {
+            display: inline;
+        }
+        .view-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+        }
+        .view-link:hover {
+            text-decoration: underline;
+            color: #ffdd57;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: float 10s ease-in-out infinite;
+            z-index: -1;
+        }
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 70%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="header">
+    <h1>Elenco Impianti</h1>
+    <div class="action-buttons-container">
+        <a th:href="@{/aggiungiImpianto}" class="btn btn-add">Aggiungi Impianto</a>
+        <a th:href="@{/report}" class="btn btn-report">Report</a>
+    </div>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Descrizione</th>
+        <th>Latitudine</th>
+        <th>Longitudine</th>
+        <th>Palinsesto</th>
+        <th>Status</th>
+        <th>Azione</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="impianto : ${impianti}">
+        <td th:text="${impianto.idimpianto}"></td>
+        <td th:text="${impianto.descrizione}"></td>
+        <td th:text="${impianto.latitudine}"></td>
+        <td th:text="${impianto.longitudine}"></td>
+        <td>
+            <a th:href="@{/visualizzaPalinsesto(idimpianto=${impianto.idimpianto})}" class="view-link">visualizza</a>
+        </td>
+        <td th:text="${impianto.status}"></td>
+        <td class="action-buttons">
+            <a th:href="@{/modificaImpianto(idimpianto=${impianto.idimpianto})}" class="btn">Modifica</a>
+            <form th:action="@{/cancellaImpianto}" method="post">
+                <input type="hidden" name="idimpianto" th:value="${impianto.idimpianto}" />
+                <button type="submit" class="btn">Cancella</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
+

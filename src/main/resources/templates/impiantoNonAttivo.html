@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impianto Non Attivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1a1a2e, #4b006e);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 400px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    p {
+      font-size: 16px;
+      font-weight: 400;
+    }
+    /* Circle animation */
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      animation: float 10s ease-in-out infinite;
+      z-index: -1;
+    }
+    .circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+    .circle:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      top: 60%;
+      left: 80%;
+      animation-delay: 3s;
+    }
+    .circle:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      top: 80%;
+      left: 20%;
+      animation-delay: 6s;
+    }
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="container">
+  <h1>Impianto Non Attivo</h1>
+  <p>L'impianto selezionato non è attivo al momento. Per favore, riprova più tardi.</p>
+</div>
+</body>
+</html>

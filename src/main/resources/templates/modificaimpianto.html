@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Impianto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1a2e, #4b006e);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+        .form-container h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .form-container .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-container label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .form-container input,
+        .form-container select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            display: block;
+        }
+        .form-container input::placeholder,
+        .form-container select option {
+            color: #ccc;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            width: calc(50% - 10px);
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .btn-cancel {
+            background-color: #17a2b8;
+        }
+        .btn-cancel:hover {
+            background-color: #117a8b;
+        }
+        /* Circle animation */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: float 10s ease-in-out infinite;
+            z-index: -1;
+        }
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="form-container">
+    <h1>Modifica Impianto</h1>
+    <form th:action="@{/updateImpianto}" method="post">
+        <input type="hidden" name="idimpianto" th:value="${impianto.idimpianto}">
+        <div class="form-group">
+            <label for="descrizione">Descrizione:</label>
+            <input type="text" id="descrizione" name="descrizione" th:value="${impianto.descrizione}">
+        </div>
+        <div class="form-group">
+            <label for="latitudine">Latitudine:</label>
+            <input type="text" id="latitudine" name="latitudine" th:value="${impianto.latitudine}">
+        </div>
+        <div class="form-group">
+            <label for="longitudine">Longitudine:</label>
+            <input type="text" id="longitudine" name="longitudine" th:value="${impianto.longitudine}">
+        </div>
+        <div class="form-group">
+            <label for="path">Palinsesto:</label>
+            <select id="path" name="path">
+                <option value="pal1" th:selected="${impianto.path == 'pal1'}">pal1</option>
+                <option value="pal2" th:selected="${impianto.path == 'pal2'}">pal2</option>
+                <option value="pal3" th:selected="${impianto.path == 'pal3'}">pal3</option>
+                <option value="pal4" th:selected="${impianto.path == 'pal4'}">pal4</option>
+                <option value="pal5" th:selected="${impianto.path == 'pal5'}">pal5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="attivo" th:selected="${impianto.status == 'Attivo'}">Attivo</option>
+                <option value="disattivo" th:selected="${impianto.status == 'Disattivo'}">Disattivo</option>
+            </select>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button type="submit" class="btn">Salva</button>
+            <a href="/impianti" class="btn btn-cancel">Annulla</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
